@@ -1,15 +1,16 @@
-const DAY = 86400000;
+const DAY = 32;//86400000;
 let userData = window.localStorage;
 let submit = document.getElementById("submitBtn");
-let paidGas = document.getElementsByName("paidGas");
-let paidPower = document.getElementsByName("paidPower");
-
+window.localStorage.clear();
 let presentEntry = {
+  'houseSize': 0,
+  'bagSize': 0,
   'trashBags': 0,
   'recyclingBags': 0,
-  'carHours': 0,
+  'carDur': 0,
   'carPoolHours': 0,
   'poolSize': 0,
+  'mpg': 0,
   'busDur': 0,
   'trainDur': 0,
   'shuttleDur': 0,
@@ -33,7 +34,7 @@ let presentEntry = {
 };
 
 window.onload = function(){
-  if(window.localStorage.length == 0){
+  if(window.localStorage.length == 0 || window.localStorage.length == 1){
     userData={
       'avgWaste': 0,
       'avgTransit': 0,
@@ -45,60 +46,59 @@ window.onload = function(){
       'totalEnergy': 0,
       'totalScore': 0,
       'entries': 0,
-      'trashBags': 0,
-      'recyclingBags': 0,
-      'carHours': 0,
-      'carPoolHours': 0,
-      'poolSize': 0,
-      'busDur': 0,
-      'trainDur': 0,
-      'shuttleDur': 0,
-      'beefCons': 0,
-      'poultryCons': 0,
-      'animCons': 0,
-      'porkCons': 0,
-      'produceCons': 0,
-      'showerDur': 0,
-      'washingDur': 0,
-      'dishDur': 0,
-      'gasBill': 0,
-      'powerBill': 0,
       'timeStamp': (new Date().getTime() - (DAY+1000))
     };
   }
 
   submit.onclick = () => {
     if(inputsCorrect()){
-      let entries = userData['entries'];
-      let wasteScore = wasteCalc(presentEntry['trashBags'], presentEntry['recyclingBags']);
-      let transitScore = transitCalc(presentEntry['carDur'], presentEntry['carPoolDur'], presentEntry['poolSize']);
-      let foodScore = foodCalc(presentEntry['porkCons'], presentEntry['beefCons'], presentEntry['poultryCons'], presentEntry['dairyCons'], presentEntry['produceCons']);
-      let energyScore = energyCalc(presentEntry['gasBill'], presentEntry['powerBill']);
-      presentEntry['entries'] += 1;
+      let entries = parseInt(userData['entries']) + 1;
+      let wasteScore = wasteCalc(presentEntry['trashBags'], presentEntry['recyclingBags'], presentEntry['houseSize'], presentEntry['bagSize']);
+      let transitScore = transitCalc(presentEntry['carDur'], presentEntry['carPoolDur'], presentEntry['poolSize'], presentEntry['mpg'], parseFloat(presentEntry['busDur']) + parseFloat(presentEntry['trainDur']));
+      let foodScore = foodCalc(presentEntry['porkCons'], presentEntry['beefCons'], presentEntry['poultryCons'], presentEntry['animCons'], presentEntry['produceCons'], presentEntry['toiletTrips'], presentEntry['showerDur'], presentEntry['washingDur'], presentEntry['dishDur']);
+      let energyScore = energyCalc(presentEntry['powerBill'], presentEntry['gasBill'], presentEntry['houseSize']);
+      presentEntry['entries'] = entries;
       presentEntry['totalScore'] = foodScore + wasteScore + energyScore + transitScore;
-      userData['totalWaste'] = wasteScore;
-      userData['totalTransit'] = transitScore;
-      userData['totalFood'] = foodScore;
-      userData['totalEnergyr'] = energyScore;
-      userData['totalScore'] = presentEntry['totalScore'];
-      userData['entries'] += 1;
-      userData['avgWaste'] = userData['totalWaste'] / entries;
-      userData['avgTransit'] = userData['totalTransit'] / entries;
-      userData['avgFood'] = userData['totalFood'] / entries;
-      userData['avgEnergy'] = userData['totalEnergy'] / entries;
+      userData['totalWaste'] = parseFloat(userData['totalWaste']) + wasteScore;
+      userData['totalTransit'] = parseFloat(userData['totalTransit']) + transitScore;
+      userData['totalFood'] = parseFloat(userData['totalFood']) + foodScore;
+      userData['totalEnergy'] = parseFloat(userData['totalEnergy']) + energyScore;
+      userData['totalScore'] = parseFloat(userData['totalScore']) + presentEntry['totalScore'];
+      userData['avgWaste'] = parseFloat(userData['totalWaste']) / entries;
+      userData['avgTransit'] = parseFloat(userData['totalTransit']) / entries;
+      userData['avgFood'] = parseFloat(userData['totalFood']) / entries;
+      userData['avgEnergy'] = parseFloat(userData['totalEnergy']) / entries;
+      userData['avgScore'] = parseFloat(userData['totalScore']) / entries;
+      userData['entries'] = entries;
 
       document.getElementById('presentWaste').innerHTML = wasteScore;
       document.getElementById('presentTransit').innerHTML = transitScore;
-      document.getElementById('presentFood').innerHTML = foodScore;
+      document.getElementById('presentCons').innerHTML = foodScore;
       document.getElementById('presentEnergy').innerHTML = energyScore;
+      document.getElementById('presentImpact').innerHTML = foodScore + wasteScore + energyScore + transitScore;
 
       document.getElementById('avgWaste').innerHTML = userData['avgWaste'];
       document.getElementById('avgTransit').innerHTML = userData['avgTransit'];
-      document.getElementById('avgFood').innerHTML = userData['avgFood'];
+      document.getElementById('avgCons').innerHTML = userData['avgFood'];
       document.getElementById('avgEnergy').innerHTML = userData['avgEnergy'];
+      document.getElementById('avgImpact').innerHTML = userData['avgScore'];
+
+      window.localStorage.setItem('entries', userData['entries']);
+      window.localStorage.setItem('totalWaste', userData['totalWaste']);
+      window.localStorage.setItem('totalFood', userData['totalFood']);
+      window.localStorage.setItem('totalTransit', userData['totalTransit']);
+      window.localStorage.setItem('totalEnergy', userData['totalEnergy']);
+      window.localStorage.setItem('totalScore', userData['totalScore']);
+      window.localStorage.setItem('avgWaste', userData['avgWaste']);
+      window.localStorage.setItem('avgTransit', userData['avgTransit']);
+      window.localStorage.setItem('avgFood', userData['avgFood']);
+      window.localStorage.setItem('avgEnergy', userData['avgEnergy']);
+      window.localStorage.setItem('avgScore', userData['avgScore']);
+      window.localStorage.setItem('entries', userData['entries']);
     }
   };
-
+  let paidGas = document.getElementsByName("paidGas");
+  let paidPower = document.getElementsByName("paidPower");
   paidGas[0].onclick = () => {
     document.getElementById("gasPrompt").style.display = "block";
   };
@@ -113,13 +113,13 @@ window.onload = function(){
     document.getElementById("powerPrompt").style.display = "none";
   };
 
-  if(dayHasPassed()){
-    submit.enabled = true;
+  if(true){//dayHasPassed()){
+    submit.disabled = false;
     submit.style.background = 'blue';
     document.getElementById("timeMessage").style.display = "none";
   }
   else{
-    submit.enabled = false;
+    submit.disabled = true;
     submit.style.background = 'gray';
     document.getElementById("timeMessage").style.display = "block";
   }
@@ -141,18 +141,24 @@ function dayHasPassed(){
 }
 
 function renderTree(score){
-  let div = document.getElementById("renderImg");
+  let tree = document.getElementById("rendering");
+  let bird = document.getElementById("birdBox");
+
   if(score < 1000){
-    div.src="TreeDead.png";
+    tree.src="Images/TreeBloom.png";
+    bird.style.display = "block";
   }
   else if(score < 2000){
-    div.src="TreePartial.png";
+    tree.src="Images/TreeFull.png";
+    bird.style.display="block";
   }
   else if(score < 3000){
-    div.src="TreeFull.png";
+    tree.src="Images/TreePartial.png";
+    bird.style.display="none";
   }
   else{
-    div.src="TreeBloom.png";
+    tree.src="Images/TreeDead.png";
+    bird.style.display="none";
   }
 }
 
@@ -181,7 +187,7 @@ function changeInput(key){
     console.log(key + ", " + element.value);
   }
   else{
-    presentEntry[key] = userData[key];
+    presentEntry[key] = parseFloat(userData[key]);
   }
 }
 
@@ -195,27 +201,78 @@ function myAccFunc(id) {
 }
 
 
-function wasteCalc(trashBags, recyclingBags, numPeople){
+function wasteCalc(trashBags, recyclingBags, numPeople, sizeTrash){
   const cWaste = 82.0676;
-  return (cWaste * (1 - (recyclingBags/trashBags)) * (numTrashBags*sizeTrash/numPeople)); //the last three variables need inputs
+  return (cWaste * (1 - (recyclingBags/trashBags)) * (trashBags*sizeTrash/numPeople)); //the last three variables need inputs
 }
 
-function transitCalc(carHours, carPoolDur, poolSize){
-  const cTransit = 0.43085;
-  return (cTransit * ((carHours*carDur) + (carPoolHours*carPoolDur/poolSize))); //need a publicTransportHours variable
+function transitCalc(carDur, carPoolHours, poolSize, mpg, publicTransportHours){
+  const cTransit = 259.644;
+  return (cTransit * ((carDur/mpg) + (carPoolHours/poolSize/mpg) + (publicTransportHours/80))); //need a publicTransportHours variable
 }
 
-function foodCalc(porkCons, beefCons, poultryCons, dairyCons, produceCons){
+function foodCalc(porkCons, beefCons, poultryCons, animalCons, produceCons, toiletTrips, showerDur, washingDur, dishDur){
   const cFood = 0.1328067;
   let foodM = (15013.3948*beefCons*0.02835) + (4806.95462*porkCons*0.02835) + (3905.65063*poultryCons*0.02835); //beef, poultry, pork
   let foodV = (1251.81*produceCons*0.02835); //vegetables, fruits
   let foodA = (3249*animalCons*0.02835); //other animal shit
   let food = foodM + foodV + foodA;
-  let water = (7.94936*showerDur)+(22.175*dishDur)+(140.06*washingDur)+(13.6*toiletTrip);
+  let water = (7.94936*showerDur)+(22.175*dishDur)+(140.06*washingDur)+(13.6*toiletTrips);
   return (cFood * (food + water));
 }
 
-function energyCalc(powerBill, gasBill){
+function energyCalc(powerBill, gasBill, numPeople){
   const cEnergy = 3.225806;
-  return (cFood * (powerBill + gasBill));
+  return (cEnergy * ((powerBill + gasBill)/numPeople));
+}
+
+var birdLocations = [[275, 0], [25, 0], [5, 380], [295, 380]];
+document.addEventListener("DOMContentLoaded", birdMovementInit());
+
+function birdMovementInit() {
+  console.log("Bird Move Init");
+  var birdMovement = setInterval(birdMovementRoutine, 7000);
+}
+
+function birdMovementRoutine() {
+  console.log("Bird Move");
+  var rand = Math.floor(4 * Math.random());
+  moveBird(birdLocations[rand][0], birdLocations[rand][1]);
+}
+
+//Centered at top left of bird
+function moveBird(newX, newY) {
+  var birdBox = document.getElementById("birdBox");
+  var birdSprite = document.getElementById("birdSprite");
+  var oldLeft = parseInt(birdBox.style.left, 10);
+  var oldTop = parseInt(birdBox.style.top, 10);
+  var duration = 500; //ms
+  var deltaT = 8;
+  var deltaX = (newX - oldLeft) / duration; //pixels per time step
+  var deltaY = (newY - oldTop) / duration; //pixels per time step
+  var birdDown = (deltaX >= 0 ? "Images/BirdFlapDown.png" : "Images/BirdFlapDownRev.png");
+  var birdStill = (deltaX >= 0 ? "Images/BirdStill.png" : "Images/BirdStillRev.png");
+  var birdUp = (deltaX >= 0 ? "Images/BirdFlapUp.png" : "Images/BirdFlapUpRev.png");
+  var t = 0;
+  var i = 0;
+
+  var movement = setInterval(function() {
+    birdBox.style.left = (parseFloat(birdBox.style.left) + (deltaX * deltaT)) + "px";
+    birdBox.style.top = (parseFloat(birdBox.style.top) + (deltaY * deltaT)) + "px";
+    t = t + deltaT;
+    i++;
+    if (i % 16 <= 4) {
+      birdSprite.src = birdDown;
+    } else if (i % 16 <= 8 || i % 16 > 12) {
+      birdSprite.src = birdStill;
+    } else {
+      birdSprite.src = birdUp;
+    }
+    if (t > duration) {
+      birdBox.style.left = newX + "px";
+      birdBox.style.top = newY + "px";
+      birdSprite.src = birdStill;
+      clearInterval(movement);
+    }
+  }, deltaT);
 }
