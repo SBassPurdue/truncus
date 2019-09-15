@@ -1,0 +1,27 @@
+Waste data
+trash bag size (slider)
+number of recycling bags
+number of trash bags
+
+Consumption data
+
+Food - servings of each type of food
+
+Meat - split into types (170.097g serving)
+	-beef: 15013.3948 L/kg
+	-pork: 4806.95462 L/kg
+	-poultry: 3905.65063 L/kg
+Dairy
+	-cheese: 3179.6 L/kg
+	-butter: 5549.69587 L/kg
+	-milk: 1018.13969 L/kg
+Other animal based products
+
+
+Water
+Flow rate - 2.1 gpm (possible optional user input)
+Length of shower
+Appliance type and how many times (add option for high efficiency)
+	-toilet: 6 L ULF, 13.6 regular
+	-dishwasher: 15.1416 L hi eff 22.7125 L regular
+	-clothes washer: 88.171 L hi eff, 140.06 L regular
