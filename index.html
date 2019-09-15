@@ -3,6 +3,7 @@
 <title>Truncus</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="Images/TreeFavicon.png"/>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -31,25 +32,27 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   padding: 0px 8px;
 }
 
-
-
 </style>
-<body class="w3-light-grey">
+<body style="background-color:lightskyblue;">
 
 <!-- Page Container -->
+
 <div class="w3-content w3-margin-top" style="max-width:1400px;">
     <!-- Left Column -->
     <div class="w3-third">
       <nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
         <div class="w3-white w3-text-grey w3-card-4" style="height: 100%;">
           <div class="w3-display-container">
-            <img src="lemniInver.png" style="width:100%" alt="Avatar">
 
             <!-- WASTE -->
             <a onclick="myAccFunc('waste')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
                 Waste Consumption <i class="fa fa-caret-down"></i>
             </a>
             <div id="waste" class="w3-bar-block w3-hide w3-padding-large w3-medium w3-show">
+              <p>How many people live in your household?: </p>
+              <input onchange="changeInput('houseSize')"class="textinput" type="text" id="houseSize"></input>
+              <p>How large are your trash bags (in gallons)?: </p>
+              <input onchange="changeInput('bagSize')"class="textinput" class="textinput" type="text" id="bagSize"></input>
               <p>How many trash bags did you take out today?: </p>
               <input onchange="changeInput('trashBags')"class="textinput" type="text" id="trashBags"></input>
               <p>How many of those trash bags were recycling?: </p>
@@ -61,9 +64,11 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
               Transit <i class="fa fa-caret-down"></i>
             </a>
             <div id="transit" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-              <p>How many hours did you travel in a car by yourself?: </p>
+              <p>How many minutes did you travel in a car by yourself?: </p>
               <input onchange="changeInput('carDur')"class="textinput" class="textinput" type="text" id="carDur"></input>
-              <p>How many hours did you travel in a car with other people?: </p>
+              <p>What is your car's gas mileage?: </p>
+              <input onchange="changeInput('mpg')"class="textinput" type="text" id="mpg"></input>
+              <p>How many minutes did you travel in a car with other people?: </p>
               <input onchange="changeInput('carPoolDur')"class="textinput" type="text" id="carPoolDur"></input>
               <p>How many people?:</p>
               <input onchange="changeInput('poolSize')"class="textinput" type="text" id="poolSize"></input>
@@ -71,8 +76,6 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
               <input onchange="changeInput('busDur')"class="textinput" type="text" id="busDur"></input>
               <p>How many minutes did you spend using a public train system?: </p>
               <input onchange="changeInput('trainDur')"class="textinput" type="text" id="trainDur"></input>
-              <p>How many minutes did you spend using a public shuttle system?: </p>
-              <input onchange="changeInput('shuttleDur')"class="textinput" type="text" id="shuttleDur"></input>
             </div>
 
             <!-- CONSUMPTION -->
@@ -82,16 +85,16 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             <div id="foodCons" class="w3-bar-block w3-hide w3-padding-large w3-medium">
               <p>How many servings of beef or lamb (3oz/serving)?: </p>
               <input onchange="changeInput('beefCons')"class="textinput" type="text" id="beefCons"></input>
-              <p>How many servings of poultry?: </p>
+              <p>How many servings of poultry (6oz/serving)?: </p>
               <input onchange="changeInput('poultryCons')"class="textinput" type="text" id="poultryCons"></input>
               <p>How many servings of pork (1oz/serving)?: </p>
               <input onchange="changeInput('porkCons')"class="textinput" type="text" id="porkCons"></input>
               <p>How many servings of animal-based products (dairy, eggs, etc.)(8oz/serving)?: </p>
-              <input onchange="changeInput('animalCons')"class="textinput" type="text" id="animalCons"></input>
+              <input onchange="changeInput('animCons')"class="textinput" type="text" id="animCons"></input>
               <p>How many servings of produce did you eat (30oz/serving)?: </p>
               <input onchange="changeInput('produceCons')"class="textinput" type="text" id="produceCons"></input>
 
-              <p>How many people are in ?: </p>
+              <p>How many toilet trips did you make?: </p>
               <input onchange="changeInput('toiletTrips')"class="textinput" type="text" id="toiletTrips"></input>
               <p>For how long (minutes) did you shower today?: </p>
               <input onchange="changeInput('showerDur')"class="textinput" type="text" id="showerDur"></input>
@@ -99,8 +102,6 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
               <input onchange="changeInput('washingDur')"class="textinput" type="text" id="washingDur"></input>
               <p>How many times did you use a dishwasher?: </p>
               <input onchange="changeInput('dishDur')"class="textinput" type="text" id="dishDur"></input>
-              <p>How many times did you use the toilet?: </p>
-              <input onchange="changeInput('toiletTrips')"class="textinput" type="text" id="toiletTrips"></input>
             </div>
 
 
@@ -140,52 +141,59 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
             <br>
           </div>
-        </div><br>
+        </div>
+        <br>
     <!-- End Left Column -->
     </nav>
     </div>
 
     <!-- Right Column -->
-    <a onclick="myAccFunc('stats')" href="javascript:void(0)" style="position: absolute; right: 300px;" class="w3-button w3-transparent" id="myBtn" style>
+    <a onclick="myAccFunc('stats')" href="javascript:void(0)" style="position: absolute; right:250px;" class="w3-button w3-transparent" id="myBtn" style>
         Statistics <i class="fa fa-caret-right"></i>
     </a>
     <div id="stats" class="w3-hide">
       <font size="2" color="white">
-      <p>Today's Waste Score is <span id="presentWaste" style="color:green">asdf<span></p>
-      <p>Your average Waste Score is <span id="avgWaste" style="color:yellow">fdsf<span></p>
+      <p>Today's Waste Score is <span id="presentWaste" style="color:green"><span></p>
+      <p>Your average Waste Score is <span id="avgWaste" style="color:yellow"><span></p>
       <br>
 
-      <p>Today's Transit Score is <span id="presentTransit" style="color:green">sdfa<span></p>
-      <p>Your average Transit Score is <span id="avgTransit" style="color:yellow">fasdf<span></p>
+      <p>Today's Transit Score is <span id="presentTransit" style="color:green"><span></p>
+      <p>Your average Transit Score is <span id="avgTransit" style="color:yellow"><span></p>
       <br>
 
-      <p>Today's Consumption Score is <span id="presentCons" style="color:green">asdf<span></p>
-      <p>Your average Consumption Score is <span id="avgCons" style="color:yellow">asdf<span></p>
+      <p>Today's Consumption Score is <span id="presentCons" style="color:green"><span></p>
+      <p>Your average Consumption Score is <span id="avgCons" style="color:yellow"><span></p>
       <br>
 
-      <p>Today's Energy Score is <span id="presentEnergy" style="color:green">sadf<span></p>
-      <p>Your average Energy Score is <span id="avgEnergy" style="color:yellow">asdf<span></p>
+      <p>Today's Energy Score is <span id="presentEnergy" style="color:green"><span></p>
+      <p>Your average Energy Score is <span id="avgEnergy" style="color:yellow"><span></p>
+      <br>
+      
+      <p>Today's Impact Score is <span id="presentImpact" style="color:green"><span></p>
+      <p>Your average Impact Score is <span id="avgImpact" style="color:yellow"><span></p>
       </font>
     </div>
+</div>
 
-    <div class="w3-twothird" height="300">
-      <div class="w3-container w3-card w3-white w3-margin-bottom">
-      </div>
-
-    <!-- End Right Column -->
-    </div>
+<div class="w3-twothird" id="renderImg" style="position:relative; margin-left:400px; background-color: lightskyblue; z-index:-1;">
+  <div id ="birdBox" style="position: absolute; width:25px; height: 25px; top:0px; left: 275px; z-index:0">
+    <img src="Images/BirdStill.png" id="birdSprite">
   </div>
+  <img src="Images/TreeFull.png" id="rendering">
+</div>
 <script src="render.js"></script>
   <!-- End Page Container -->
-<footer class="w3-container w3-teal w3-center w3-margin-top">
-  <p>Find me on social media.</p>
-  <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  <i class="fa fa-instagram w3-hover-opacity"></i>
-  <i class="fa fa-snapchat w3-hover-opacity"></i>
-  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-  <i class="fa fa-twitter w3-hover-opacity"></i>
-  <i class="fa fa-linkedin w3-hover-opacity"></i>
-</footer>
+<div>
+  <!-- <footer class="w3-container w3-teal w3-center">
+    <p>Find me on social media.</p>
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </footer> -->
+</div>
 
 </body>
 </html>
