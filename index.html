@@ -22,6 +22,15 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   transition: opacity .2s;
 }
 
+nav::-webkit-scrollbar {
+  width:10px;
+
+}
+nav::-webkit-scrollbar-track {
+  width: 10px;
+  background-color: #AAAAAA;
+}
+
 #stats{
   height: 100%;
   width: 250px;
@@ -37,11 +46,10 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
 <!-- Page Container -->
 
-<div class="w3-content w3-margin-top" style="max-width:1400px;">
     <!-- Left Column -->
     <div class="w3-third">
-      <nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
-        <div class="w3-white w3-text-grey w3-card-4" style="height: 100%;">
+      <nav class="w3-sidebar w3-bar-block w3-collapse w3-top" style="z-index:3;width:250px;background-color:#FFFFFF;" id="mySidebar">
+        <div style="height: 100%; color:#000000; background-color:#FFFFFF;">
           <div class="w3-display-container">
 
             <!-- WASTE -->
@@ -132,19 +140,16 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
                 <input onchange="changeInput('powerBill')" class="textinput" type="text" id="powerBill"></input>
               </div>
             </div>
-            <a class="w3-button w3-block w3-left-align" style="color: white; background-color: blue;" id="submitBtn">
-             Submit
-            </a>
             <p style="display:none; padding:8px; color:red;" id="timeMessage">You've already submitted a new record for today</p>
           </div>
-          <div class="w3-container">
-
-            <br>
-          </div>
         </div>
+        <a class="w3-button w3-block w3-left-align" style="color: white; background-color: blue; left: 0px;" id="submitBtn">
+          Submit
+        </a>
         <br>
     <!-- End Left Column -->
     </nav>
+
     </div>
 
     <!-- Right Column -->
@@ -168,32 +173,20 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
       <p>Today's Energy Score is <span id="presentEnergy" style="color:green"><span></p>
       <p>Your average Energy Score is <span id="avgEnergy" style="color:yellow"><span></p>
       <br>
-      
+
       <p>Today's Impact Score is <span id="presentImpact" style="color:green"><span></p>
       <p>Your average Impact Score is <span id="avgImpact" style="color:yellow"><span></p>
       </font>
     </div>
-</div>
 
-<div class="w3-twothird" id="renderImg" style="position:relative; margin-left:400px; background-color: lightskyblue; z-index:-1;">
+<div id="renderImg" style="width: 66.67%; position:relative; margin-left:400px; background-color: lightskyblue; z-index:-1; height:100%;">
   <div id ="birdBox" style="position: absolute; width:25px; height: 25px; top:0px; left: 275px; z-index:0">
     <img src="Images/BirdStill.png" id="birdSprite">
   </div>
-  <img src="Images/TreeFull.png" id="rendering">
+  <img src="Images/TreeFull.png" style="margin-right:auto; margin-left: auto; bottom: 10px;" id="rendering">
 </div>
 <script src="render.js"></script>
   <!-- End Page Container -->
-<div>
-  <!-- <footer class="w3-container w3-teal w3-center">
-    <p>Find me on social media.</p>
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </footer> -->
-</div>
 
 </body>
 </html>
