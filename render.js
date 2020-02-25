@@ -33,7 +33,7 @@ let presentEntry = {
   'timeStamp': new Date().getTime()
 };
 
-window.onload = function(){
+window.onload = function() {
   if(window.localStorage.length == 0 || window.localStorage.length == 1){
     userData={
       'avgWaste': 0,
@@ -123,6 +123,7 @@ window.onload = function(){
     submit.style.background = 'gray';
     document.getElementById("timeMessage").style.display = "block";
   }
+  document.getElementById("birdBox").style.left = 275 + document.getElementById("treeImage").getBoundingClientRect().x + "px";
   setInterval(main, 100 / 6);
 }
 
@@ -141,7 +142,7 @@ function dayHasPassed(){
 }
 
 function renderTree(score){
-  let tree = document.getElementById("rendering");
+  let tree = document.getElementById("treeImage");
   let bird = document.getElementById("birdBox");
 
   if(score < 1000){
@@ -192,23 +193,23 @@ function changeInput(key){
 }
 
 function myAccFunc(id) {
-  var x = document.getElementById(id);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else {
-    x.className = x.className.replace(" w3-show", "");
-  }
+  let x = document.getElementById(id);
+  // if (x.className.indexOf("w3-show") == -1) {
+  //   x.className += " w3-show";
+  // } else {
+  //   x.className = x.className.replace(" w3-show", "");
+  // }
 }
 
 
 function wasteCalc(trashBags, recyclingBags, numPeople, sizeTrash){
   const cWaste = 82.0676;
-  return (cWaste * (1 - (recyclingBags/trashBags)) * (trashBags*sizeTrash/numPeople)); //the last three variables need inputs
+  return (cWaste * (1 - (recyclingBags/trashBags)) * (trashBags*sizeTrash/numPeople)); //the last three letiables need inputs
 }
 
 function transitCalc(carDur, carPoolHours, poolSize, mpg, publicTransportHours){
   const cTransit = 259.644;
-  return (cTransit * ((carDur/mpg) + (carPoolHours/poolSize/mpg) + (publicTransportHours/80))); //need a publicTransportHours variable
+  return (cTransit * ((carDur/mpg) + (carPoolHours/poolSize/mpg) + (publicTransportHours/80))); //need a publicTransportHours letiable
 }
 
 function foodCalc(porkCons, beefCons, poultryCons, animalCons, produceCons, toiletTrips, showerDur, washingDur, dishDur){
@@ -226,37 +227,38 @@ function energyCalc(powerBill, gasBill, numPeople){
   return (cEnergy * ((powerBill + gasBill)/numPeople));
 }
 
-var birdLocations = [[275, 0], [25, 0], [5, 380], [295, 380]];
+let birdLocations = [[275, 0], [25, 0], [5, 380], [295, 380]];
 document.addEventListener("DOMContentLoaded", birdMovementInit());
 
 function birdMovementInit() {
   console.log("Bird Move Init");
-  var birdMovement = setInterval(birdMovementRoutine, 7000);
+  let birdMovement = setInterval(birdMovementRoutine, 7000);
 }
 
 function birdMovementRoutine() {
+  let treeBound = document.getElementById("treeImage").getBoundingClientRect();
   console.log("Bird Move");
-  var rand = Math.floor(4 * Math.random());
-  moveBird(birdLocations[rand][0], birdLocations[rand][1]);
+  let rand = Math.floor(4 * Math.random());
+  moveBird(birdLocations[rand][0] + treeBound.x, birdLocations[rand][1]);
 }
 
 //Centered at top left of bird
 function moveBird(newX, newY) {
-  var birdBox = document.getElementById("birdBox");
-  var birdSprite = document.getElementById("birdSprite");
-  var oldLeft = parseInt(birdBox.style.left, 10);
-  var oldTop = parseInt(birdBox.style.top, 10);
-  var duration = 500; //ms
-  var deltaT = 8;
-  var deltaX = (newX - oldLeft) / duration; //pixels per time step
-  var deltaY = (newY - oldTop) / duration; //pixels per time step
-  var birdDown = (deltaX >= 0 ? "Images/BirdFlapDown.png" : "Images/BirdFlapDownRev.png");
-  var birdStill = (deltaX >= 0 ? "Images/BirdStill.png" : "Images/BirdStillRev.png");
-  var birdUp = (deltaX >= 0 ? "Images/BirdFlapUp.png" : "Images/BirdFlapUpRev.png");
-  var t = 0;
-  var i = 0;
+  let birdBox = document.getElementById("birdBox");
+  let birdSprite = document.getElementById("birdSprite");
+  let oldLeft = parseInt(birdBox.style.left, 10);
+  let oldTop = parseInt(birdBox.style.top, 10);
+  let duration = 500; //ms
+  let deltaT = 8;
+  let deltaX = (newX - oldLeft) / duration; //pixels per time step
+  let deltaY = (newY - oldTop) / duration; //pixels per time step
+  let birdDown = (deltaX >= 0 ? "Images/BirdFlapDown.png" : "Images/BirdFlapDownRev.png");
+  let birdStill = (deltaX >= 0 ? "Images/BirdStill.png" : "Images/BirdStillRev.png");
+  let birdUp = (deltaX >= 0 ? "Images/BirdFlapUp.png" : "Images/BirdFlapUpRev.png");
+  let t = 0;
+  let i = 0;
 
-  var movement = setInterval(function() {
+  let movement = setInterval(function() {
     birdBox.style.left = (parseFloat(birdBox.style.left) + (deltaX * deltaT)) + "px";
     birdBox.style.top = (parseFloat(birdBox.style.top) + (deltaY * deltaT)) + "px";
     t = t + deltaT;
